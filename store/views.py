@@ -13,7 +13,7 @@ def product_list(request):
     return Response(serializer.data)
 
 
-@api_view()
+@api_view()  
 def product_detail(request, id):
     product = get_object_or_404(Product, pk=id)
     serializer = ProductSerializer(product)
