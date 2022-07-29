@@ -9,12 +9,18 @@ from .serializers import ProductSerializer
 @api_view()
 def product_list(request):
     queryset = Product.objects.select_related('collection').all()
-    serializer = ProductSerializer(queryset, many=True)
+    serializer = ProductSerializer(
+        queryset, many=True, context={'request': request})
     return Response(serializer.data)
 
 
-@api_view()  
-def product_detail(request, id):
-    product = get_object_or_404(Product, pk=id)
+@api_view()
+def product_detail(request, pk ):
+    product = get_object_or_404(Product, pk=pk )
     serializer = ProductSerializer(product)
     return Response(serializer.data)
+
+
+@api_view()
+def collection_detail(request, id):
+    return Response("ok")
