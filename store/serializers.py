@@ -4,7 +4,7 @@ from rest_framework import serializers
 from store.models import Product, Collection
 
 
-class COllectionSerializer(serializers.ModelSerializer):
+class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
         fields = ['id', 'title', 'products_count']
