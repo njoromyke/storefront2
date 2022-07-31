@@ -42,6 +42,12 @@ class CollectionViewSet(ModelViewSet):
             return Response({'error': 'Collection cannot be deleted as it already in use'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         return super().destroy(request, *args, **kwargs)
 
+
 class ReviewViewSet(ModelViewSet):
-    queryset = Review.objects.all()
-    serializer_class= ReviewSerializer
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return Review.objects.filter(product_id=self.kwargs['product_pk'])
+
+    def get_serializer_context(self):
+        return {'product_id': self.kwargs['product_pk']}
