@@ -42,26 +42,14 @@ class CollectionList(ListCreateAPIView):
         return {'request': self.request}
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def collection_detail(request, id):
-
-    collection = get_object_or_404(
-        Collection.objects.annotate(
-            products_count=Count('products'), pk=id)
+class CollectionDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Collection.objects.annotate(
+        products_count=Count('product')
     )
-    if request.method == 'GET':
+    serializer_class = COllectionSerializer
 
-        serializer = COllectionSerializer(collection,)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = COllectionSerializer(
-            collection,
-            data=request.data,
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-    elif request.metho == 'DELETE':
+    def delete(self, request, pk):
+        collection = get_object_or_404(Collection, pk=pk)
         if collection.products.count() > 0:
             return Response({'error': 'Collection cannot be deleted as it already in use'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
         collection.delete()
