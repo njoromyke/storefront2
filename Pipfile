@@ -10,6 +10,7 @@ cryptography = "*"
 pymysql = "*"
 djangorestframework = "*"
 drf-nested-routers = "*"
+django-filter = "*"
 
 [dev-packages]
 autopep8 = "*"
