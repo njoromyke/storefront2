@@ -9,8 +9,8 @@ from store import serializers
 from store.filters import ProdcutFilter
 from store.pagination import DefaultPagination
 
-from .models import Cart, Collection, OrderItem, Product, Review
-from .serializers import (CartSerializer, Collection, CollectionSerializer, ProductSerializer,
+from .models import Cart, CartItem, Collection, OrderItem, Product, Review
+from .serializers import (CartItemSerializer, CartSerializer, Collection, CollectionSerializer, ProductSerializer,
                           ReviewSerializer)
 
 
@@ -65,3 +65,12 @@ class CartViewSet(CreateModelMixin,
                   GenericViewSet):
     queryset = Cart.objects.prefetch_related('items__product').all()
     serializer_class = CartSerializer
+
+
+class CartItemViewSet(ModelViewSet):
+    serializer_class = CartItemSerializer
+
+    def get_queryset(self):
+        return CartItem.objects\
+            .filter(cart_id=self.kwargs['cart_pk'])\
+            .select_related('product')
