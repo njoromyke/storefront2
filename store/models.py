@@ -2,6 +2,7 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib import admin
 from uuid import uuid4
+from store import permissions
 
 from storefront import settings
 
@@ -41,6 +42,9 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['title']
+        permissions = [
+            ('view-history', 'Can View history')
+        ]
 
 
 class Customer(models.Model):
