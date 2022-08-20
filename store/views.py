@@ -14,11 +14,11 @@ from store.filters import ProdcutFilter
 from store.pagination import DefaultPagination
 from store.permissions import FullDjangoModelPermissions, IsAdminOrReadOnly, ViewCustomerHistoryPermission
 
-from store.models import (Cart, CartItem, Collection, Customer, OrderItem, Product,
+from store.models import (Cart, CartItem, Collection, Customer, Order, OrderItem, Product,
                           Review)
 from store.serializers import (AddCartItemSerializer, CartItemSerializer,
                                CartSerializer, Collection, CollectionSerializer,
-                               CustomerSerializer, ProductSerializer,
+                               CustomerSerializer, OrderSerializer, ProductSerializer,
                                ReviewSerializer, UpdateCartItemSerializer)
 
 
@@ -122,3 +122,8 @@ class CustomerViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
