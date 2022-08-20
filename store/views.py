@@ -1,4 +1,5 @@
 
+from urllib import request
 from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, DjangoModelPermissions
@@ -125,5 +126,15 @@ class CustomerViewSet(ModelViewSet):
 
 
 class OrderViewSet(ModelViewSet):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_staff:
+            return Order.objects.all()
+
+        (customer_id,created) = Customer.objects.only(
+            'id').get(user_id=user.id)
+        return Order.objects.filter(customer_id=customer_id)
