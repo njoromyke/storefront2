@@ -1,5 +1,6 @@
 
 from multiprocessing import context
+from urllib import request
 from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
@@ -20,7 +21,7 @@ from store.serializers import (AddCartItemSerializer, CartItemSerializer,
                                CollectionSerializer, CreateOrderSerializer,
                                CustomerSerializer, OrderSerializer,
                                ProductSerializer, ReviewSerializer,
-                               UpdateCartItemSerializer)
+                               UpdateCartItemSerializer, UpdateOrderSerializer)
 
 
 class ProductViewSet(ModelViewSet):
@@ -146,6 +147,8 @@ class OrderViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateOrderSerializer
+        elif self.request.method == 'PATCH':
+            return UpdateOrderSerializer
         return OrderSerializer
 
     def get_queryset(self):
